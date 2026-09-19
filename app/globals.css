@@ -1,26 +1,159 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/*
+ * Design tokens for the desktop-OS portfolio.
+ *
+ * Every color, radius, shadow, and font family a component uses must
+ * resolve through one of the CSS variables below — no hardcoded hex
+ * values outside this file. See CLAUDE.md for the full contract.
+ *
+ * Theme and accent are switched by attributes on <html>, written by a
+ * Settings store in a later phase:
+ *   data-theme="light" | "dark"   (absent -> follow prefers-color-scheme)
+ *   data-accent="powder" | "system" | "ocean" | "midnight"  (absent -> system)
+ */
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SFMono-Regular",
+    monospace;
+  --font-display: var(--font-archivo), ui-sans-serif, sans-serif;
 }
 
+@theme {
+  /* ---- type scale: 12 / 13 / 15 / 17 / 21 / 28 / 44 / 72 ---- */
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.9375rem;
+  --text-lg: 1.0625rem;
+  --text-xl: 1.3125rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.75rem;
+  --text-4xl: 4.5rem;
+
+  /* ---- shape ---- */
+  --radius-control: 6px;
+  --radius-window: 10px;
+  --radius-dock: 16px;
+
+  /* two-layer window shadow: a tight 1px ambient hairline + a wide soft
+     drop. Redefined per theme below — never collapse this to one blur. */
+  --shadow-window: 0 0 0 1px rgba(12, 20, 24, 0.06),
+    0 20px 40px -12px rgba(12, 20, 24, 0.22);
+
+  /* ---- color: base (light) ---- */
+  --color-surface-0: #fbfcfd; /* window bodies */
+  --color-surface-1: #f1f5f8; /* panels, sidebars */
+  --color-surface-2: #e2eaf0; /* insets, wells */
+  --color-ink: #0c1418; /* primary text */
+  --color-ink-muted: #5a6b78; /* secondary text */
+  --color-hairline: #cbd8e2; /* 1px borders, window chrome */
+
+  /* ---- color: accent (default ramp = system) ---- */
+  --color-accent-soft: #4da2ff;
+  --color-accent: #0a84ff;
+  --color-accent-strong: #0062cc;
+}
+
+/* ============================================================
+ * Dark base — system preference (no explicit data-theme) and the
+ * explicit override both land here.
+ * ============================================================ */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not([data-theme="light"]) {
+    --color-surface-0: #0e1822;
+    --color-surface-1: #131f2b;
+    --color-surface-2: #1b2a38;
+    --color-ink: #e8f0f6;
+    --color-ink-muted: #8ca3b5;
+    --color-hairline: #26384a;
+
+    --shadow-window: 0 0 0 1px rgba(0, 0, 0, 0.6),
+      0 20px 40px -12px rgba(0, 0, 0, 0.55);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+:root[data-theme="dark"] {
+  --color-surface-0: #0e1822;
+  --color-surface-1: #131f2b;
+  --color-surface-2: #1b2a38;
+  --color-ink: #e8f0f6;
+  --color-ink-muted: #8ca3b5;
+  --color-hairline: #26384a;
+
+  --shadow-window: 0 0 0 1px rgba(0, 0, 0, 0.6),
+    0 20px 40px -12px rgba(0, 0, 0, 0.55);
 }
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+/* ============================================================
+ * Accent ramps — soft / base / strong, selectable in Settings.
+ * "system" is listed for explicitness even though it matches the
+ * @theme default above.
+ *
+ * Deliberately NOT scoped to `:root` — a descendant element (e.g. a
+ * swatch in the accent picker) can carry its own `data-accent` to preview
+ * that ramp locally without switching the whole page's accent.
+ * ============================================================ */
+[data-accent="powder"] {
+  --color-accent-soft: #a8c8dc;
+  --color-accent: #7faecb;
+  --color-accent-strong: #5b93b5;
+}
+
+[data-accent="system"] {
+  --color-accent-soft: #4da2ff;
+  --color-accent: #0a84ff;
+  --color-accent-strong: #0062cc;
+}
+
+[data-accent="ocean"] {
+  --color-accent-soft: #3fb8c8;
+  --color-accent: #0e9aac;
+  --color-accent-strong: #077c8c;
+}
+
+[data-accent="midnight"] {
+  --color-accent-soft: #5c6fd8;
+  --color-accent: #3b4fc4;
+  --color-accent-strong: #2a3aa0;
+}
+
+/* ============================================================
+ * Base element styles
+ * ============================================================ */
+html {
+  color-scheme: light dark;
+}
+
+body {
+  background: var(--color-surface-1);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/*
+ * Display treatment: width axis pushed wide, weight 800+. Used ONLY for
+ * the boot logo and the three-letter stack-card monograms — nowhere else.
+ */
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-variation-settings: "wdth" 125;
+}
+
+/*
+ * Reduced motion is enforced at the animation source — every timeline
+ * factory in lib/motion.ts checks prefersReducedMotion() and must swap
+ * its tweens for instant `.set()` calls — not with a CSS media query
+ * here, so JS-driven and CSS-driven motion can't disagree.
+ */
