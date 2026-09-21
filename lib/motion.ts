@@ -1,4 +1,5 @@
 import gsap from "gsap";
+import { useSettingsStore } from "./settings-store";
 
 /**
  * The motion layer. Every animation in the app — window open/close/
@@ -34,6 +35,9 @@ export const DURATION = {
  */
 export function prefersReducedMotion(): boolean {
   if (typeof window === "undefined") return false;
+  const override = useSettingsStore.getState().reducedMotion;
+  if (override === "on") return true;
+  if (override === "off") return false;
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 

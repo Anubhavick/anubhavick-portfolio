@@ -9,6 +9,7 @@ interface DesktopLayoutState {
    * content-authored default grid cell. */
   positions: Record<string, { x: number; y: number }>;
   setPosition: (id: string, x: number, y: number) => void;
+  resetPositions: () => void;
 }
 
 export function snapToGrid(value: number): number {
@@ -26,6 +27,7 @@ export const useDesktopLayoutStore = create<DesktopLayoutState>()(
             [id]: { x: snapToGrid(x), y: snapToGrid(y) },
           },
         })),
+      resetPositions: () => set({ positions: {} }),
     }),
     { name: "desktop-icon-positions" },
   ),

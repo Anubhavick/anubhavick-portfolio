@@ -1,6 +1,7 @@
 import { createElement, type ReactElement } from "react";
 import {
   AppWindow,
+  Braces,
   Briefcase,
   Code2,
   Cpu,
@@ -10,8 +11,12 @@ import {
   HelpCircle,
   Link,
   Mail,
+  MessageCircle,
+  Search,
+  Settings,
   Terminal,
   User,
+  Users,
   type LucideIcon,
   type LucideProps,
 } from "lucide-react";
@@ -37,7 +42,13 @@ const registry: Record<string, LucideIcon> = {
   "app-window": AppWindow,
   github: Code2,
   linkedin: Link,
+  twitter: MessageCircle,
+  peerlist: Users,
+  leetcode: Braces,
   file: File,
+  settings: Settings,
+  "help-circle": HelpCircle,
+  search: Search,
 };
 
 function resolveIcon(id: string): LucideIcon {

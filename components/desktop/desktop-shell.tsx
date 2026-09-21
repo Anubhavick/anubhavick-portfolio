@@ -1,6 +1,7 @@
 "use client";
 
 import { MenuBar } from "@/components/menu-bar/menu-bar";
+import { SearchOverlay } from "@/components/search/search-overlay";
 import { Wallpaper } from "@/components/wallpaper";
 import { Dock } from "@/components/dock/dock";
 import { WindowManager } from "@/components/window/window-manager";
@@ -18,6 +19,7 @@ export function DesktopShell() {
         <WindowManager />
       </main>
       <Dock />
+      <SearchOverlay />
     </div>
   );
 }

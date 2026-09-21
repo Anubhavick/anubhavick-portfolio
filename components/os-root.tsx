@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { BootSequence } from "@/app/(desktop)/boot";
+import { openWindowTarget } from "@/lib/use-open-window";
+import { resolveRouteTarget } from "@/lib/route-target";
 import { DesktopShell } from "./desktop/desktop-shell";
 import { MobileShell } from "./mobile/mobile-shell";
 import { SettingsSync } from "./settings-sync";
@@ -18,6 +20,8 @@ export function OsRoot() {
   const pathname = usePathname();
   const [bootDone, setBootDone] = useState<boolean | null>(null);
   const processedPathnameRef = useRef<string | null>(null);
+  const openedForPathnameRef = useRef<string | null>(null);
+  const routeTarget = useMemo(() => resolveRouteTarget(pathname), [pathname]);
 
   // sessionStorage doesn't exist during SSR, so this has to resolve
   // client-side after mount — same hydration-safe shape as the clock.
@@ -43,13 +47,23 @@ export function OsRoot() {
   }, [pathname]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
+  // A direct visit (or in-app navigation) to a content route opens the
+  // matching window — the same singleton `openWindow` path every dock/
+  // desktop icon goes through, so re-visiting just refocuses it.
+  useEffect(() => {
+    if (bootDone !== true) return;
+    if (openedForPathnameRef.current === pathname) return;
+    openedForPathnameRef.current = pathname;
+    if (routeTarget) openWindowTarget(routeTarget);
+  }, [pathname, bootDone, routeTarget]);
+
   return (
     <>
       <SettingsSync />
       {bootDone === true && (
         <>
           <DesktopShell />
-          <MobileShell />
+          <MobileShell routeTarget={routeTarget} />
         </>
       )}
       {bootDone === false && <BootSequence onComplete={() => setBootDone(true)} />}

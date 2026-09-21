@@ -1,35 +1,53 @@
 import { experienceEntrySchema, type ExperienceEntry } from "./schema";
 
 /**
- * Placeholder experience — 2 fake entries satisfying `experienceEntrySchema`.
- * Phase 4 replaces the values, not the shape.
+ * Real experience, most recent first. Dates are ISO "YYYY-MM" per
+ * `experienceEntrySchema`, taken directly from the resume.
  */
 export const experience: ExperienceEntry[] = [
   {
-    id: "exp-placeholder-co",
-    organization: "Placeholder Co.",
-    role: "Software Engineering Intern",
-    location: "Remote",
-    startDate: "2024-05",
-    endDate: "2024-08",
+    id: "exp-hack-with-india",
+    organization: "Hack with India, MRIIRS Chapter",
+    role: "Knowledge Resource Lead",
+    location: "Faridabad, Haryana",
+    startDate: "2025-10",
     summary:
-      "Placeholder summary of this internship. Replace with real content in Phase 4.",
+      "Runs the technical side of MRIIRS's Hack with India chapter — workshops for a large student developer community and hands-on mentorship during hackathons.",
     highlights: [
-      "Placeholder highlight about a feature shipped.",
-      "Placeholder highlight about a measurable improvement made.",
+      "Lead technical workshops for 200+ student developers covering web development, AI/ML, and full-stack best practices.",
+      "Mentor hackathon teams on architecture decisions, API design, and deployment strategy.",
     ],
-    stack: ["TypeScript", "React", "PostgreSQL"],
+    stack: [],
   },
   {
-    id: "exp-placeholder-labs",
-    organization: "Placeholder Labs",
-    role: "Student Developer",
-    location: "Faridabad, India",
-    startDate: "2023-08",
+    id: "exp-skycore-aviation",
+    organization: "Skycore Aviation Academy",
+    role: "Full-Stack Developer",
+    location: "Remote",
+    startDate: "2025-09",
+    endDate: "2025-10",
     summary:
-      "Placeholder summary of ongoing student work. Replace with real content in Phase 4.",
-    highlights: ["Placeholder highlight about a campus project."],
-    stack: ["Next.js", "Python"],
+      "Built the corporate web presence for a flight-training academy, then extended the engagement to two more aviation-themed properties.",
+    highlights: [
+      "Built a responsive corporate site with React, TypeScript, and Tailwind CSS — 95+ Lighthouse score, 1K+ monthly visitors (skycoreaviation.vercel.app).",
+      "Shipped two further properties under the same engagement: a pilot simulation portal (pilot-sim-portal.vercel.app) and a private jet charter site (airjet-rosy.vercel.app).",
+    ],
+    stack: ["React", "TypeScript", "Tailwind CSS"],
+  },
+  {
+    id: "exp-central-health-innovation",
+    organization: "Central Health Innovation, MRIIRS",
+    role: "Backend Developer",
+    location: "Faridabad, Haryana",
+    startDate: "2025-06",
+    endDate: "2025-08",
+    summary:
+      "Built the backend for a healthcare initiative at MRIIRS, including location-aware lookups backed by the Google Maps API.",
+    highlights: [
+      "Built scalable REST APIs with Node.js, Express, TypeScript, and MongoDB.",
+      "Integrated the Google Maps API to reduce query latency on location-based lookups.",
+    ],
+    stack: ["Node.js", "Express", "TypeScript", "MongoDB"],
   },
 ];
 

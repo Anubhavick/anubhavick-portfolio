@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Archivo, Geist, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
+import { OsRoot } from "@/components/os-root";
 import { noFlashScript } from "@/lib/settings-store";
+import { SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -36,9 +38,20 @@ const archivo = Archivo({
 });
 
 export const metadata: Metadata = {
-  title: "Anubhav Mishra",
-  description:
-    "Portfolio of Anubhav Mishra, a full-stack developer and 3rd-year CS student, built as a desktop-operating-system metaphor.",
+  metadataBase: new URL(SITE_URL),
+  title: { default: SITE_NAME, template: `%s — ${SITE_NAME}` },
+  description: `Portfolio of ${SITE_NAME}. ${SITE_TAGLINE} Built as a desktop-operating-system metaphor.`,
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  creator: SITE_NAME,
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    creator: "@Anubhavick",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -54,6 +67,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {noFlashScript}
         </Script>
         {children}
+        <OsRoot />
       </body>
     </html>
   );

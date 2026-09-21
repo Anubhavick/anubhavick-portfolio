@@ -3,6 +3,7 @@
 import { useSyncExternalStore } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { ACCENTS, type Accent } from "./accents";
 
 /**
  * Theme and accent, written to attributes on <html> (see CLAUDE.md ->
@@ -10,16 +11,21 @@ import { persist } from "zustand/middleware";
  * data-theme attribute" i.e. follow prefers-color-scheme.
  */
 export type Theme = "light" | "dark" | null;
-export type Accent = "powder" | "system" | "ocean" | "midnight";
+/** "system" defers to prefers-reduced-motion; "on"/"off" force it either way. */
+export type ReducedMotion = "system" | "on" | "off";
 
-export const ACCENTS: Accent[] = ["powder", "system", "ocean", "midnight"];
+export { ACCENTS, type Accent };
 
 interface SettingsState {
   theme: Theme;
   accent: Accent;
+  reducedMotion: ReducedMotion;
+  wallpaperGrain: boolean;
   setTheme: (theme: Theme) => void;
   setAccent: (accent: Accent) => void;
   toggleTheme: () => void;
+  setReducedMotion: (value: ReducedMotion) => void;
+  setWallpaperGrain: (value: boolean) => void;
 }
 
 /** Resolves the *effective* light/dark theme when `theme` is null. */
@@ -36,10 +42,14 @@ export const useSettingsStore = create<SettingsState>()(
     (set, get) => ({
       theme: null,
       accent: "system",
+      reducedMotion: "system",
+      wallpaperGrain: true,
       setTheme: (theme) => set({ theme }),
       setAccent: (accent) => set({ accent }),
       toggleTheme: () =>
         set({ theme: effectiveTheme(get().theme) === "dark" ? "light" : "dark" }),
+      setReducedMotion: (reducedMotion) => set({ reducedMotion }),
+      setWallpaperGrain: (wallpaperGrain) => set({ wallpaperGrain }),
     }),
     { name: "settings" },
   ),

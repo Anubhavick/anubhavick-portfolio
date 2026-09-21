@@ -18,7 +18,7 @@ import {
   useWindowStore,
   type WindowState,
 } from "@/lib/window-store";
-import { PlaceholderBody } from "./placeholder-body";
+import { WindowBody } from "./window-body";
 
 const EDGE_SNAP_THRESHOLD = 20;
 
@@ -309,7 +309,7 @@ export function Window({ win, focused, onSnapPreviewChange }: WindowProps) {
       </div>
 
       <div className="min-h-0 flex-1 overflow-auto bg-surface-0">
-        <PlaceholderBody target={win.target} />
+        <WindowBody target={win.target} />
       </div>
 
       {RESIZE_HANDLES.map(({ dir, className }) => (

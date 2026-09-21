@@ -55,6 +55,9 @@
   --color-accent-soft: #4da2ff;
   --color-accent: #0a84ff;
   --color-accent-strong: #0062cc;
+
+  /* ---- color: semantic ---- */
+  --color-danger: #c4392e; /* terminal errors, destructive settings actions */
 }
 
 /* ============================================================
@@ -72,6 +75,8 @@
 
     --shadow-window: 0 0 0 1px rgba(0, 0, 0, 0.6),
       0 20px 40px -12px rgba(0, 0, 0, 0.55);
+
+    --color-danger: #ff6f61;
   }
 }
 
@@ -85,6 +90,8 @@
 
   --shadow-window: 0 0 0 1px rgba(0, 0, 0, 0.6),
     0 20px 40px -12px rgba(0, 0, 0, 0.55);
+
+  --color-danger: #ff6f61;
 }
 
 :root[data-theme="light"] {

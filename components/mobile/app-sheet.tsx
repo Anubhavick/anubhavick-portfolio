@@ -6,7 +6,7 @@ import { renderIcon } from "@/lib/icons";
 import { createWindowCloseTimeline, createWindowOpenTimeline, DURATION, type Rect } from "@/lib/motion";
 import { resolveWindowMeta } from "@/lib/window-content";
 import type { WindowTarget } from "@/lib/window-store";
-import { PlaceholderBody } from "@/components/window/placeholder-body";
+import { WindowBody } from "@/components/window/window-body";
 
 const DISMISS_THRESHOLD = 120;
 
@@ -113,7 +113,7 @@ export function AppSheet({ target, originRect, onRequestClose }: AppSheetProps) 
       </div>
 
       <div className="min-h-0 flex-1 overflow-auto">
-        <PlaceholderBody target={target} />
+        <WindowBody target={target} />
       </div>
     </div>
   );

@@ -76,6 +76,26 @@ export const appDefinitions: AppDefinition[] = [
     resizable: true,
     singleton: true,
   },
+  {
+    id: "settings",
+    name: "Settings",
+    icon: "settings",
+    description: "Appearance, motion, and desktop preferences.",
+    defaultSize: { width: 520, height: 480 },
+    minSize: { width: 420, height: 420 },
+    resizable: true,
+    singleton: true,
+  },
+  {
+    id: "help",
+    name: "Help",
+    icon: "help-circle",
+    description: "The dock, shortcuts, terminal commands, and search syntax.",
+    defaultSize: { width: 580, height: 540 },
+    minSize: { width: 440, height: 380 },
+    resizable: true,
+    singleton: true,
+  },
 ];
 
 appDefinitions.forEach((app) => appDefinitionSchema.parse(app));

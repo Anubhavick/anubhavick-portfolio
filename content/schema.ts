@@ -35,6 +35,8 @@ export const appIdSchema = z.enum([
   "contact",
   "terminal",
   "resume",
+  "settings",
+  "help",
 ]);
 export type AppId = z.infer<typeof appIdSchema>;
 

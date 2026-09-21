@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { Search } from "lucide-react";
 import { appDefinitions, socialLinks } from "@/content";
+import { useSearchStore } from "@/lib/search/search-store";
 import { useOpenWindow } from "@/lib/use-open-window";
 import { useSettingsStore } from "@/lib/settings-store";
 import { useWindowStore } from "@/lib/window-store";
@@ -13,6 +15,7 @@ import { ThemeToggle } from "./theme-toggle";
 export function MenuBar() {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const openWindow = useOpenWindow();
+  const openSearch = useSearchStore((s) => s.open);
 
   const windows = useWindowStore((s) => s.windows);
   const focusedId = useWindowStore((s) => s.focusedId);
@@ -56,10 +59,14 @@ export function MenuBar() {
     { label: "Show Desktop", disabled: windows.length === 0, onSelect: minimizeAll },
   ];
 
-  const goItems: MenuItemDef[] = appDefinitions.map((app) => ({
-    label: app.name,
-    onSelect: () => openWindow({ kind: "app", appId: app.id }, document.activeElement as HTMLElement),
-  }));
+  const goItems: MenuItemDef[] = [
+    { label: "Search…", shortcut: "⌘K", onSelect: openSearch },
+    { type: "separator" },
+    ...appDefinitions.map((app) => ({
+      label: app.name,
+      onSelect: () => openWindow({ kind: "app", appId: app.id }, document.activeElement as HTMLElement),
+    })),
+  ];
 
   const windowItems: MenuItemDef[] = [
     { label: "Tile Left", disabled: !hasFocused, onSelect: () => tileFocused("left") },
@@ -85,7 +92,7 @@ export function MenuBar() {
       ? ([{ type: "separator" }, { label: "View Source", onSelect: () => window.open(githubLink.url, "_blank", "noopener,noreferrer") }] as MenuItemDef[])
       : []),
     { type: "separator" },
-    { type: "note", label: "⌘W close · ⎋ close top · ⌘` cycle" },
+    { type: "note", label: "⌘K search · ⌘W close · ⎋ close top · ⌘` cycle" },
   ];
 
   const menus: { key: string; label: string; items: MenuItemDef[] }[] = [
@@ -115,6 +122,14 @@ export function MenuBar() {
       </div>
 
       <div className="flex items-center gap-3">
+        <button
+          type="button"
+          aria-label="Search (⌘K)"
+          onClick={openSearch}
+          className="flex size-6 items-center justify-center rounded-control text-ink-muted outline-none transition-colors hover:text-ink focus-visible:ring-2 focus-visible:ring-accent"
+        >
+          <Search size={14} strokeWidth={1.8} />
+        </button>
         <AccentPicker />
         <ThemeToggle />
         <Clock />

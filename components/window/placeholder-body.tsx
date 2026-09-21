@@ -82,7 +82,7 @@ export function PlaceholderBody({ target }: PlaceholderBodyProps) {
         </p>
       )}
       <p className="font-mono text-xs text-ink-muted">
-        content arrives in a later phase
+        no inline preview yet — ping me by email for the PDF
       </p>
     </div>
   );

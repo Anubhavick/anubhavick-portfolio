@@ -5,3 +5,4 @@ export { stackCategories } from "./stack";
 export { socialLinks } from "./social-links";
 export { appDefinitions } from "./apps";
 export { desktopFiles } from "./desktop-files";
+export * from "./fs";

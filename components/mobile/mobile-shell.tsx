@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { desktopFiles } from "@/content";
 import type { DesktopFile } from "@/content/schema";
 import { IconTile } from "@/components/icon-tile";
 import { Wallpaper } from "@/components/wallpaper";
+import { centerOriginRect } from "@/lib/use-open-window";
 import { useISTClock } from "@/lib/use-clock";
 import type { Rect } from "@/lib/motion";
-import type { WindowTarget } from "@/lib/window-store";
+import { launchKey, type WindowTarget } from "@/lib/window-store";
 import { AppSheet } from "./app-sheet";
 
 interface ActiveSheet {
@@ -20,9 +21,29 @@ function rectOf(el: HTMLElement): Rect {
   return { x: r.x, y: r.y, width: r.width, height: r.height };
 }
 
-export function MobileShell() {
+interface MobileShellProps {
+  /** Set when the current URL is a content route — opens (or keeps open)
+   * the matching sheet, mirroring what the desktop window manager does. */
+  routeTarget?: WindowTarget | null;
+}
+
+export function MobileShell({ routeTarget }: MobileShellProps) {
   const time = useISTClock();
   const [sheet, setSheet] = useState<ActiveSheet | null>(null);
+
+  // Mirrors OsRoot's own opening of the desktop window store: syncing the
+  // mobile sheet to a route change that happened outside React (a direct
+  // URL visit, or a Link navigation) has no non-effect equivalent here.
+  /* eslint-disable react-hooks/set-state-in-effect */
+  useEffect(() => {
+    if (!routeTarget) return;
+    setSheet((prev) =>
+      prev && launchKey(prev.target) === launchKey(routeTarget)
+        ? prev
+        : { target: routeTarget, originRect: centerOriginRect() },
+    );
+  }, [routeTarget]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   function handleOpen(file: DesktopFile, el: HTMLElement) {
     if (file.kind === "link" && file.href) {

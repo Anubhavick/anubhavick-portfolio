@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { getWindowActions } from "@/lib/window-action-registry";
 import type { Rect } from "@/lib/motion";
+import { useSearchStore } from "@/lib/search/search-store";
 import { useWindowStore } from "@/lib/window-store";
 import { Window } from "./window";
 
@@ -45,6 +46,9 @@ export function WindowManager() {
       }
 
       if (e.key === "Escape") {
+        // The search overlay handles its own Escape (to close itself)
+        // without touching windows underneath it.
+        if (useSearchStore.getState().isOpen) return;
         const { windows } = useWindowStore.getState();
         const top = windows
           .filter((w) => !w.minimised)
